@@ -14,23 +14,32 @@ public class MapGeneratorTest : Node2D
     int renderToleranceOffset = 10;
     private static float timeLeft = 30F;
 
-    public float TimeLeft {
-        set {
+    public float TimeLeft
+    {
+        set
+        {
             timeLeft = Mathf.Max(0F, value);
             EmitSignal("TimeLeftUpdated", timeLeft);
-            if (timeLeft <= 0F) {
+            if (timeLeft <= 0F)
+            {
                 GetTree().ReloadCurrentScene();
             }
         }
-    
+
         get { return timeLeft; }
     }
 
-    public override void _Ready() {
+    public override void _Ready()
+    {
         Global.MainScene = this;
-        if (Global.IsDebug) {
-            TimeLeft = 25000F;
-        }        
+        if (Global.IsDebug)
+        {
+            TimeLeft = Global.INITIAL_DEBUG_TIME;
+        }
+        else
+        {
+            TimeLeft = Global.INITIAL_TIME;
+        }
         player = GetNode<Player>("Player");
         tilemap = GetNode<GeneratedTileMap>("GeneratedTileMap");
         debugLabel = GetNode<RichTextLabel>("DebugUI/DebugLabel");
@@ -39,11 +48,13 @@ public class MapGeneratorTest : Node2D
     }
 
     float lastDebugTime = 0F;
-    public override void _PhysicsProcess(float delta) {
+    public override void _PhysicsProcess(float delta)
+    {
 
         CheckWorldUpdate();
         lastDebugTime += delta;
-        if (lastDebugTime > 1F) {
+        if (lastDebugTime > 1F)
+        {
             lastDebugTime = 0F;
             debugLabel.BbcodeText = tilemap.mMapGenerator.ToRichTextString();
         }
@@ -52,42 +63,51 @@ public class MapGeneratorTest : Node2D
 
     }
 
-    private void CheckWorldUpdate() {
-        var mappedPlayerPosX = (int) tilemap.WorldToMap(player.GlobalPosition).x;
-        
+    private void CheckWorldUpdate()
+    {
+        var mappedPlayerPosX = (int)tilemap.WorldToMap(player.GlobalPosition).x;
+
         if (!Global.IsLeftGenBusy &&
-            (mappedPlayerPosX < (tilemap.mMapGenerator.LeftmostGlobalX + generationToleranceOffset))) {
-                Global.IsLeftGenBusy = true;
-                Task.Factory.StartNew(() => {
-                    tilemap.mMapGenerator.GenerateChunksOnLeft(2);
-                    Global.IsLeftGenBusy = false;
-                });
+            (mappedPlayerPosX < (tilemap.mMapGenerator.LeftmostGlobalX + generationToleranceOffset)))
+        {
+            Global.IsLeftGenBusy = true;
+            Task.Factory.StartNew(() =>
+            {
+                tilemap.mMapGenerator.GenerateChunksOnLeft(2);
+                Global.IsLeftGenBusy = false;
+            });
         }
 
         if (!Global.IsRightGenBusy &&
-            (mappedPlayerPosX > (tilemap.mMapGenerator.RightmostGlobalX - generationToleranceOffset))) {
-                Global.IsRightGenBusy = true;
-                Task.Factory.StartNew(() => {
-                    tilemap.mMapGenerator.GenerateChunksOnRight(2);
-                    Global.IsRightGenBusy = false;
-                });
+            (mappedPlayerPosX > (tilemap.mMapGenerator.RightmostGlobalX - generationToleranceOffset)))
+        {
+            Global.IsRightGenBusy = true;
+            Task.Factory.StartNew(() =>
+            {
+                tilemap.mMapGenerator.GenerateChunksOnRight(2);
+                Global.IsRightGenBusy = false;
+            });
         }
 
         if (mappedPlayerPosX < (tilemap.LeftmostGlobalX + renderToleranceOffset) ||
-            mappedPlayerPosX > (tilemap.RightmostGlobalX - renderToleranceOffset)) {
+            mappedPlayerPosX > (tilemap.RightmostGlobalX - renderToleranceOffset))
+        {
             // TODO: Possibly make signals for these
             tilemap.UpdateWorldAroundX(mappedPlayerPosX);
         }
 
     }
 
-    public override void _Input(InputEvent e) {
-        if (e.IsActionPressed("restart")) {
+    public override void _Input(InputEvent e)
+    {
+        if (e.IsActionPressed("restart"))
+        {
             GetTree().ReloadCurrentScene();
         }
     }
 
-    private void OnPlayerExitedScreen() {
+    private void OnPlayerExitedScreen()
+    {
         GetTree().ReloadCurrentScene();
     }
 }

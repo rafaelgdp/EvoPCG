@@ -72,7 +72,8 @@ __meta__ = {
 [node name="AuthorLabel" type="Label" parent="DebugUI/ParametersUI"]
 margin_right = 342.0
 margin_bottom = 21.0
-text = "Made by Rafael Guerra de Pontes"
+text = "Game Type A"
+align = 1
 
 [node name="HSeparator" type="HSeparator" parent="DebugUI/ParametersUI"]
 margin_top = 25.0
@@ -190,5 +191,6 @@ bbcode_text = "[center]Time left: 25.00 s[/center]"
 text = "Time left: 25.00 s"
 scroll_active = false
 script = ExtResource( 6 )
+
 [connection signal="PlayerExitedScreen" from="Player" to="." method="OnPlayerExitedScreen"]
 [connection signal="pressed" from="DebugUI/ParametersUI/SetParamsButton" to="DebugUI/ParametersUI" method="OnSetParams"]

@@ -3,7 +3,9 @@ using Godot;
 public class Global : Node
 {
 
-    public static bool IsDebug = true;
+    public const float INITIAL_TIME = 25.0f;
+    public const float INITIAL_DEBUG_TIME = 25000.0f;
+    public static bool IsDebug = false;
     public static float Gravity = 1000F;
     public static float Friction = 1000F;
     public static int Population = 30;

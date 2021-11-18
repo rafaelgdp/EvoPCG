@@ -63,5 +63,6 @@ one_shot = true
 [node name="HurtAnimationPlayer" type="AnimationPlayer" parent="."]
 anims/hurt = SubResource( 2 )
 anims/normal = SubResource( 3 )
+
 [connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="OnExitedScreen"]
 [connection signal="timeout" from="HurtCooldownTimer" to="." method="onHurtCooldownTimerTimeout"]

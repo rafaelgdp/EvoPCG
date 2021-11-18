@@ -11,9 +11,6 @@ public class TimeLeftRTL : RichTextLabel
             bb = $"[color=yellow]{bb}[/color]";
         } else if (tl <= 10F) {
             bb = $"[color=red]{bb}[/color]";
-            if (tl <= 5F) {
-                bb = $"[tornado]{bb}[/tornado]";
-            }
         }
         BbcodeText = bb;
     }
